@@ -7,13 +7,13 @@ StoryLens is a production-style Data Engineering project built around large-scal
 The goal is to design a reproducible data pipeline that ingests raw IMDb data, structures it into analytical layers, and exposes business-ready KPIs through a connected dashboard.
 
 ----------------------------------------------------------------------------
-# 1. Start PostgreSQL
+## QUICKSTART
+
+1. Start PostgreSQL
 docker compose up -d postgres
-
-# 2. Run full data pipeline (download + load + marts)
+2. Run full data pipeline (download + load + marts)
 docker compose run --rm pipeline
-
-# 3. Launch dashboard
+3. Launch dashboard
 docker compose up dashboard
 ----------------------------------------------------------------------------
 
