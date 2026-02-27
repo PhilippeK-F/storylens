@@ -7,9 +7,59 @@ services:
       POSTGRES_PASSWORD: warehouse
     ports:
       - "5432:5432"
-
-  app:
-    build: .
-    command: ["python","-m","src.pipelines.run_pipeline"]
     volumes:
-      - .:/app
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U warehouse -d warehouse"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  pipeline:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: warehouse
+      POSTGRES_USER: warehouse
+      POSTGRES_PASSWORD: warehouse
+      DATA_DIR: /app/data
+      IMDB_BASE_URL: https://datasets.imdbws.com
+      PYTHONPATH: /app/src
+    volumes:
+      - ./data:/app/data
+      - ./sql:/app/sql
+    command: >
+      bash -lc "
+      python -m storylens.pipelines.run_01_download_imdb &&
+      python -m storylens.pipelines.run_02_stage_imdb &&
+      python -m storylens.pipelines.run_03_load_bronze &&
+      psql -h postgres -U warehouse -d warehouse -f /app/sql/020_silver_views.sql &&
+      psql -h postgres -U warehouse -d warehouse -f /app/sql/030_gold_marts.sql &&
+      psql -h postgres -U warehouse -d warehouse -f /app/sql/040_gold_story_signals.sql
+      "
+
+  dashboard:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: warehouse
+      POSTGRES_USER: warehouse
+      POSTGRES_PASSWORD: warehouse
+      PYTHONPATH: /app/src
+    ports:
+      - "8501:8501"
+    command: >
+      bash -lc "
+      python -m streamlit run dashboard/streamlit_app.py --server.address=0.0.0.0 --server.port=8501
+      "
+
+volumes:
+  pgdata:
