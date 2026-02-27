@@ -1,5 +1,7 @@
 __pycache__/
 *.pyc
+*.parquet
+*.csv
 .venv/
 data/raw/
 data/staging/*.csv
