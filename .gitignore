@@ -7,6 +7,8 @@ data/staging/
 # Python
 __pycache__/
 *.pyc
+*.parquet
+*.csv
 .venv/
 
 # Env
