@@ -1,18 +1,20 @@
-# Data (do not commit large datasets)
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Environment
+.env
+
+# Data (do not commit datasets)
 data/raw/
 data/staging/
 *.parquet
 *.csv
 
-# Python
-__pycache__/
-*.pyc
-*.parquet
-*.csv
-.venv/
-
-# Env
-.env
-
 # IDE
 .vscode/
+
+# OS
+.DS_Store
+Thumbs.db
