@@ -1,0 +1,42 @@
+storylens/
+├─ README.md
+├─ README_SETUP.md
+├─ .gitignore
+├─ .env.example
+├─ requirements.txt
+├─ docker-compose.yml
+├─ Dockerfile
+├─ .gitlab-ci.yml                  
+├─ data/
+│  ├─ raw/                          
+│  ├─ staging/                      
+│  └─ logs/
+├─ sql/
+│  ├─ 001_create_schema.sql
+│  ├─ 010_bronze_tables.sql
+│  ├─ 020_silver_views.sql
+│  └─ 030_gold_marts.sql
+├─ src/
+│  ├─ storylens/
+│  │  ├─ __init__.py
+│  │  ├─ common/
+│  │  │  ├─ config.py
+│  │  │  ├─ logging.py
+│  │  │  └─ db.py
+│  │  ├─ extract/
+│  │  │  ├─ imdb_downloader.py
+│  │  │  └─ tmdb_client.py        
+│  │  ├─ transform/
+│  │  │  ├─ imdb_clean.py
+│  │  │  └─ narrative_features.py   
+│  │  ├─ load/
+│  │  │  └─ postgres_loader.py
+│  │  └─ pipelines/
+│  │     ├─ run_01_download_imdb.py
+│  │     ├─ run_02_stage_imdb.py
+│  │     └─ run_03_load_bronze.py
+├─ dashboard/
+│  └─ streamlit_app.py              
+└─ tests/
+   ├─ test_imdb_clean.py
+   └─ test_narrative_features.py
