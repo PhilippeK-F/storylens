@@ -1,7 +1,16 @@
+# Data (do not commit large datasets)
+data/raw/
+data/staging/
+*.parquet
+*.csv
+
+# Python
 __pycache__/
 *.pyc
 .venv/
-data/raw/
-data/staging/*.csv
+
+# Env
 .env
+
+# IDE
 .vscode/
