@@ -36,12 +36,11 @@ services:
       bash -lc "
       python -m storylens.pipelines.run_01_download_imdb &&
       python -m storylens.pipelines.run_02_stage_imdb &&
+      psql -h postgres -U warehouse -d warehouse -f /app/sql/010_bronze_tables.sql &&
       python -m storylens.pipelines.run_03_load_bronze &&
       psql -h postgres -U warehouse -d warehouse -f /app/sql/020_silver_views.sql &&
       psql -h postgres -U warehouse -d warehouse -f /app/sql/030_gold_marts.sql &&
-      psql -h postgres -U warehouse -d warehouse -f /app/sql/040_gold_story_signals.sql
-      "
-
+      psql -h postgres -U warehouse -d warehouse -f /app/sql/040_gold_story_signals.sql"
   dashboard:
     build: .
     depends_on:
